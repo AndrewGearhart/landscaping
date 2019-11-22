@@ -1,0 +1,1 @@
+docker-compose exec web /bin/sh -c "export RAILS_ENV=test; bundle exec guard"

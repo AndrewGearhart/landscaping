@@ -1,0 +1,41 @@
+version: '3.5'
+services:
+  web:
+    tty: true
+    stdin_open: true
+    environment:
+      DATACITE_URL: ${DATACITE_URL}
+      DATACITE_USERNAME: ${DATACITE_USERNAME}
+      DATACITE_PASSWORD: ${DATACITE_PASSWORD}
+      DATACITE_PREFIX: ${DATACITE_PREFIX}
+      DATACITE_PUBLISHER: ${DATACITE_PUBLISHER-Scholarsphere}
+      POSTGRES_DB: scholarsphere
+      POSTGRES_USER: scholarsphere
+      POSTGRES_PASSWORD: scholarsphere
+      AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID:-scholarsphere}
+      AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY:-scholarsphere}
+      AWS_BUCKET: scholarsphere
+      AWS_REGION: us-east-1
+      S3_ENDPOINT: http://minio:9000
+      RAILS_ENV: development
+      SOLR_HOST: solr
+      SOLR_COLLECTION: scholarsphere
+      POSTGRES_HOST: db
+    build: 
+      context: . 
+      target: base
+    volumes:
+    # This is an empty volume to prevent empty dir bind it's way into the container
+    - /app/vendor/bundle
+    - /app/node_modules
+    - type: bind
+      source: ./
+      target: /app/
+    ports:
+      - "3000:3000"
+
+volumes:
+  bundle-data:
+  minio-data:
+  solr-data:
+  db-data:
